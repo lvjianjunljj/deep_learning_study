@@ -2,10 +2,6 @@ import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
 from tensorflow_study.digital_reco.model_save_restore_1.model import Network
 
-'''
-python 3.6
-tensorflow 1.4
-'''
 
 
 class Train:
@@ -24,7 +20,7 @@ class Train:
         # data_set/train-labels-idx1-ubyte.gz
         # data_set/t10k-images-idx3-ubyte.gz
         # data_set/t10k-labels-idx1-ubyte.gz
-        self.data = input_data.read_data_sets('MNIST_data', one_hot=True)
+        self.data = input_data.read_data_sets(r'..\MNIST_data', one_hot=True)
 
     def train(self):
         # batch_size 是指每次迭代训练，传入训练的图片张数。

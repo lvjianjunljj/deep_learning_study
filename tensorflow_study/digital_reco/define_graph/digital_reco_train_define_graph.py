@@ -22,7 +22,7 @@ def compute_accuracy(test_xs, test_ys):
 
 
 # 下载mnist数据
-mnist = input_data.read_data_sets('MNIST_data', one_hot=True)
+mnist = input_data.read_data_sets('..\MNIST_data', one_hot=True)
 
 
 # 权重参数初始化
@@ -48,7 +48,7 @@ def max_pool_2x2(x):
     return tf.nn.max_pool(x, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
 
 
-# 输入输出数据的placeholder  
+# 输入输出数据的placeholder
 xs = tf.placeholder(tf.float32, [None, 784])
 ys = tf.placeholder(tf.float32, [None, 10])
 # dropout的比例  
@@ -56,7 +56,6 @@ keep_prob = tf.placeholder(tf.float32)
 
 # 对数据进行重新排列，形成图像  
 x_image = tf.reshape(xs, [-1, 28, 28, 1])  # -1, 28, 28, 1
-
 
 print(x_image.shape)
 
@@ -109,11 +108,16 @@ train_step = tf.train.AdamOptimizer(0.001).minimize(cross_entropy)
 # 定义Session  
 sess = tf.Session()
 init = tf.global_variables_initializer()
-# 执行初始化  
+
+saver = tf.train.Saver(max_to_keep=1)
+tf.add_to_collection('x', xs)
+tf.add_to_collection('prediction', prediction)
+tf.add_to_collection('keep_prob', keep_prob)
+
+# 执行初始化
 sess.run(init)
 
-# 进行训练迭代  
-saver = tf.train.Saver(max_to_keep=1)
+# 进行训练迭代
 for i in range(1000):
     # 取出mnist数据集中的100个数据
     batch_xs, batch_ys = mnist.train.next_batch(50)  # 100

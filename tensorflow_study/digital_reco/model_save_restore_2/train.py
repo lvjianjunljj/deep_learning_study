@@ -1,32 +1,32 @@
-#!/usr/bin/env python
-# 导入mnist数据库
+# The most successful model save demo!!!
+# import mnist data
 from tensorflow.examples.tutorials.mnist import input_data
 mnist = input_data.read_data_sets("../MNIST_data/", one_hot=True)
 import tensorflow as tf
 import os
-# 定义输入变量
+# define input variables
 x = tf.placeholder(tf.float32, [None, 784])
-# 定义参数
+# define parameters
 W = tf.Variable(tf.zeros([784, 10]))
 b = tf.Variable(tf.zeros([10]))
-# 定义激励函数
+# define activation function
 y = tf.nn.softmax(tf.matmul(x, W) + b)
-# 定义输出变量
+# define output variables
 y_ = tf.placeholder(tf.float32, [None, 10])
-# 定义成本函数
+# define loss functions
 cross_entropy = tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(y), reduction_indices=[1]))
-# 定义优化函数
+# define optimization function
 train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)
 # 初始化变量
 init = tf.global_variables_initializer()
 # 定义会话
 sess = tf.Session()
-# 运行初始化
-sess.run(init)
 # 定义模型保存对象
 saver = tf.train.Saver()
 tf.add_to_collection('x', x)
 tf.add_to_collection('y', y)
+# 运行初始化
+sess.run(init)
 # 循环训练1000次
 for i in range(1000):
     batch_xs, batch_ys = mnist.train.next_batch(100)

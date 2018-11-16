@@ -4,6 +4,7 @@ import tensorflow as tf
 from tensorflow_study.digital_reco.model_save_restore_1.model import Network
 import cv2
 
+
 class Predict:
     def __init__(self):
         self.net = Network()
@@ -33,7 +34,6 @@ class Predict:
         #         print(flatten_img[i * 28 + j], end='\t')
         #     print()
 
-
         x = np.array([1 - flatten_img])
         y = self.sess.run(self.net.y, feed_dict={self.net.x: x})
 
@@ -53,7 +53,6 @@ class Predict:
         # np.argmax()取得独热编码最大值的下标，即代表的数字
         print(image_path)
         print('        -> Predict digit', np.argmax(y[0]))
-
 
 
 if __name__ == "__main__":

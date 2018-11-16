@@ -2,7 +2,6 @@
 # _*_ coding: utf-8 _*_  
 
 import tensorflow as tf
-import numpy
 from tensorflow.examples.tutorials.mnist import input_data
 
 

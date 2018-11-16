@@ -25,10 +25,11 @@ for i in range(20):
     numName = str(i)
     img = cv2.imread("D:/DeepLearning/digitalRecognition/digitalData/" + numName + ".bmp", 0)
     shrink = cv2.resize(img, (28, 28), interpolation=cv2.INTER_AREA)
-    data = np.expand_dims(shrink, axis=2)
-    data = np.array(data, dtype=np.float32) / 255.0
-    data = np.expand_dims(data, axis=0)
+    # data = np.expand_dims(shrink, axis=2)
+    # data = np.array(data, dtype=np.float32) / 255.0
+    # data = np.expand_dims(data, axis=0)
     # data = np.array(shrink, dtype=np.float32) / 255
-    data = data.reshape(1, 1, 28, 28)
+    # data = data.reshape(1, 1, 28, 28)
+    data = shrink.reshape(1, 1, 28, 28)
     negate2828(data)
     print(str(i) + ' recognize result: ' + str(model.predict_classes(data, batch_size=1, verbose=0)[0]))

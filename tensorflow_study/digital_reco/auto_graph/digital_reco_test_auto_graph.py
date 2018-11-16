@@ -40,7 +40,8 @@ with tf.Session() as sess:
         r'D:/DeepLearning/digitalRecognition/modelGallery/ModelSaveRestore2/MyModel.ckpt.meta')
     new_saver.restore(sess, r'D:/DeepLearning/digitalRecognition/modelGallery/ModelSaveRestore2/MyModel.ckpt')
     # Use this function when you save the model every few steps
-    # new_saver.restore(sess, tf.train.latest_checkpoint(r'D:/DeepLearning/digitalRecognition/modelGallery/ModelSaveRestore2'))
+    # new_saver.restore(sess,
+    #                   tf.train.latest_checkpoint(r'D:/DeepLearning/digitalRecognition/modelGallery/ModelSaveRestore2'))
     x = tf.get_collection('x')[0]
     y = tf.get_collection('y')[0]
     for i in range(20):

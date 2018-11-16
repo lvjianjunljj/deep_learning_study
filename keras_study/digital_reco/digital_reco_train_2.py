@@ -1,20 +1,19 @@
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation
 from keras.optimizers import SGD
-import keras
 from keras.datasets import mnist
 import numpy as np
 
 model = Sequential()
-model.add(Dense(500, input_shape=(784, )))  # 输入层， 28*28=784
+model.add(Dense(500, input_shape=(784, )))  # input layer: 28*28=784
 model.add(Activation('tanh'))
 model.add(Dropout(0.5))  # 50% dropout
 
-model.add(Dense(500))  # 隐藏层， 500
+model.add(Dense(500))  # hidden layer: 500
 model.add(Activation('tanh'))
 model.add(Dropout(0.5))  # 50% dropout
 
-model.add(Dense(10))  # 输出结果， 10
+model.add(Dense(10))  # output result, 10
 model.add(Activation('softmax'))
 
 sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)  # 设定学习效率等参数
@@ -24,8 +23,8 @@ model.compile(loss='categorical_crossentropy', optimizer=sgd)  # 使用交叉熵
 (x_train, y_train), (x_test, y_test) = mnist.load_data()  # 使用mnist读取数据（第一次需要下载）
 # x_train = x_train.reshape(60000, 28, 28, 1)
 # x_test = x_test.reshape(10000, 28, 28, 1)
-# y_test = keras_study.utils.to_categorical(y_test, 10)
 # y_train = keras_study.utils.to_categorical(y_train, 10)
+# y_test = keras_study.utils.to_categorical(y_test, 10)
 x_train = x_train.reshape(x_train.shape[0], x_train.shape[1] * x_train.shape[2])
 x_test = x_test.reshape(x_test.shape[0], x_test.shape[1] * x_test.shape[2])
 

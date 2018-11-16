@@ -6,16 +6,16 @@ import torch.optim as optim
 import argparse
 import os
 
-# 定义是否使用GPU
+# define if use GPU
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
-# 定义网络结构
-class LeNet(nn.Module):
+# define network architectures
+class Net(nn.Module):
     def __init__(self):
-        super(LeNet, self).__init__()
+        super(Net, self).__init__()
         self.conv1 = nn.Sequential(  # input_size=(1*28*28)
-            nn.Conv2d(1, 6, 5, 1, 2),  # padding=2保证输入输出尺寸相同
+            nn.Conv2d(1, 6, 5, 1, 2),  # padding=2 guaranteed the sizes of input and output are the same
             nn.ReLU(),  # input_size=(6*28*28)
             nn.MaxPool2d(kernel_size=2, stride=2),  # output_size=(6*14*14)
         )
@@ -34,11 +34,12 @@ class LeNet(nn.Module):
         )
         self.fc3 = nn.Linear(84, 10)
 
-    # 定义前向传播过程，输入为x
+    # Define the forward propagation process, input is x
     def forward(self, x):
         x = self.conv1(x)
         x = self.conv2(x)
-        # nn.Linear()的输入输出都是维度为一的值，所以要把多维度的tensor展平成一维
+        # The input and output of nn.Linear() are all values of dimension one,
+        # so we should flatten the multi-dimensional tensor into one dimension.
         x = x.view(x.size()[0], -1)
         x = self.fc1(x)
         x = self.fc2(x)
@@ -46,66 +47,68 @@ class LeNet(nn.Module):
         return x
 
 
-# 使得我们能够手动输入命令行参数，就是让风格变得和Linux命令行差不多
+# So that we can manually enter the command line parameters,
+# it is to make the style become similar to the Linux command line.
 if not os.path.exists('./model'):
     os.makedirs('./model')
 parser = argparse.ArgumentParser()
-parser.add_argument('--outf', default='./model/', help='folder to output images and model checkpoints')  # 模型保存路径
-parser.add_argument('--net', default='./model/net.pth', help="path to netG (to continue training)")  # 模型加载路径
+parser.add_argument('--outf', default='./model/',
+                    help='folder to output images and model checkpoints')  # Model save path
+parser.add_argument('--net', default='./model/net.pth', help="path to netG (to continue training)")  # Model load path
 opt = parser.parse_args()
 
-# 超参数设置
-EPOCH = 8  # 遍历数据集次数
-BATCH_SIZE = 64  # 批处理尺寸(batch_size)
-LR = 0.001  # 学习率
+# Hyperparameter setting
+EPOCH = 8  # The number of traversing data sets
+BATCH_SIZE = 64  #
+LR = 0.001  # learning rate
 
-# 定义数据预处理方式
+# Define data preprocessing methods
 transform = transforms.ToTensor()
 
-# 定义训练数据集
+# Define training data sets
 trainset = tv.datasets.MNIST(
     root='./data/',
     train=True,
     download=True,
     transform=transform)
 
-# 定义训练批处理数据
+# Define training batch data
 trainloader = torch.utils.data.DataLoader(
     trainset,
     batch_size=BATCH_SIZE,
     shuffle=True,
 )
 
-# 定义测试数据集
+# Define test data sets
 testset = tv.datasets.MNIST(
     root='./data/',
     train=False,
     download=True,
     transform=transform)
 
-# 定义测试批处理数据
+# Define test batch data
 testloader = torch.utils.data.DataLoader(
     testset,
     batch_size=BATCH_SIZE,
     shuffle=False,
 )
 
-# 定义损失函数loss function 和优化方式（采用SGD）
-net = LeNet().to(device)
-criterion = nn.CrossEntropyLoss()  # 交叉熵损失函数，通常用于多分类问题上
+# Define loss function and optimization method(use SGD)
+net = Net().to(device)
+criterion = nn.CrossEntropyLoss()  # Cross entropy loss function, usually used for multi-classification problems
 optimizer = optim.SGD(net.parameters(), lr=LR, momentum=0.9)
 
-# 训练
+# train
 if __name__ == "__main__":
 
     for epoch in range(EPOCH):
         sum_loss = 0.0
-        # 数据读取
+        # read data
         for i, data in enumerate(trainloader):
             inputs, labels = data
             inputs, labels = inputs.to(device), labels.to(device)
 
-            # 梯度清零
+            # gradient clear
             optimizer.zero_grad()
 
             # forward + backward
@@ -114,13 +117,13 @@ if __name__ == "__main__":
             loss.backward()
             optimizer.step()
 
-            # 每训练100个batch打印一次平均loss
+            # Print an average loss for every 100 batches of training
             sum_loss += loss.item()
             if i % 100 == 99:
                 print('[%d, %d] loss: %.03f'
                       % (epoch + 1, i + 1, sum_loss / 100))
                 sum_loss = 0.0
-        # 每跑完一次epoch测试一下准确率
+        # Test the accuracy every time you run epoch
         with torch.no_grad():
             correct = 0
             total = 0
@@ -128,9 +131,9 @@ if __name__ == "__main__":
                 images, labels = data
                 images, labels = images.to(device), labels.to(device)
                 outputs = net(images)
-                # 取得分最高的那个类
+                # Take the class with the highest score
                 _, predicted = torch.max(outputs.data, 1)
                 total += labels.size(0)
                 correct += (predicted == labels).sum()
-            print('第%d个epoch的识别准确率为：%d%%' % (epoch + 1, (100 * correct / total)))
+            print('The recognition accuracy rate of %d epoch: %d%%' % (epoch + 1, (100 * correct / total)))
     torch.save(net, '%s/net_%03d.pth' % (opt.outf, epoch + 1))

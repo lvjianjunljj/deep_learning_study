@@ -5,3 +5,6 @@ Step:
 4. expression_reco_train.py: train step.
 5. expression_reco_test.py: test step.
 6. expression_reco_camera.py: Real-time monitoring and recognition demo.
+
+Note: 
+The source link: [code](https://github.com/shillyshallysxy/emotion_classifier) [doc](https://blog.csdn.net/shillyshally/article/details/80912854)

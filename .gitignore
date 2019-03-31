@@ -4,3 +4,9 @@
 
 __pycache__/
 .idea/*
+pytorch_study/digital_reco/data/
+pytorch_study/digital_reco/model/
+pytorch_study/digital_reco/LeNet.patch
+
+keras_study/expression_reco/demo_kaggle_data/fer2013/
+keras_study/expression_reco/demo_kaggle_data/pic/
